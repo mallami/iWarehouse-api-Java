@@ -133,6 +133,26 @@ public class StockService {
 		stockRepo.updateStockQty(itemQTY, itemId);
 	}
 	
+	// UPDATE STOCK ITEM SELLING PRICE BY PERCENT & ITEM ID
+	public Stock updateSellingPrice(double sellingPercent, int itemId) {
+		double sellingPrice = stockRepo.getItemById(itemId).getSellingPrice();
+		double profitAmount = sellingPrice * sellingPercent;
+		sellingPrice = sellingPrice + profitAmount;		
+		if(sellingPercent == 0) sellingPrice = stockRepo.getItemById(itemId).getCostPrice();
+		
+		stockRepo.updateSellingPrice(sellingPrice, itemId);
+		
+		Stock stock = stockRepo.getItemById(itemId);		
+		stock.setUpdatedBy(UserController.uName + " - Set Selling Price as " + (sellingPercent * 100) + "% - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
+		stockRepo.save(stock);
+
+		if(!getUserPermissions().getCostPrice()) {
+			stock.setCostPrice(null);
+		}
+
+		return stock;
+	}
+	
 	// UPDATE STOCK ITEM SALE PRICE BY PERCENT & ITEM ID
 	public Stock updateSalePrice(double salePercent, int itemId) {
 		double sellingPrice = stockRepo.getItemById(itemId).getSellingPrice();
@@ -143,7 +163,7 @@ public class StockService {
 		stockRepo.updateSalePrice(salePrice, itemId);
 		
 		Stock stock = stockRepo.getItemById(itemId);		
-		stock.setUpdatedBy(UserController.uName + " - Stock Item Sale Price Updated as " + (salePercent * 100) + "% - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
+		stock.setUpdatedBy(UserController.uName + " - Set Sale Price as " + (salePercent * 100) + "% - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
 		stockRepo.save(stock);
 
 		if(!getUserPermissions().getCostPrice()) {
@@ -153,12 +173,27 @@ public class StockService {
 		return stock;
 	}
 	
+	// SAVE STOCK ITEM SELLING PRICE BY ITEM ID
+	public Stock saveSellingPrice(double sellingPrice, int itemId) {
+		stockRepo.updateSellingPrice(sellingPrice, itemId);
+		
+		Stock stock = stockRepo.getItemById(itemId);		
+		stock.setUpdatedBy(UserController.uName + " - Selling Price Adjusted - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
+		stockRepo.save(stock);
+
+		if(!getUserPermissions().getCostPrice()) {
+			stock.setCostPrice(null);
+		}
+
+		return stock;
+	}
+
 	// SAVE STOCK ITEM SALE PRICE BY ITEM ID
 	public Stock saveSalePrice(double salePrice, int itemId) {
 		stockRepo.updateSalePrice(salePrice, itemId);
 		
 		Stock stock = stockRepo.getItemById(itemId);		
-		stock.setUpdatedBy(UserController.uName + " - Stock Item Sale Price Adjusted - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
+		stock.setUpdatedBy(UserController.uName + " - Sale Price Adjusted - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
 		stockRepo.save(stock);
 
 		if(!getUserPermissions().getCostPrice()) {
