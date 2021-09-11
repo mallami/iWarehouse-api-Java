@@ -48,6 +48,11 @@ public interface StockRepo extends JpaRepository<Stock,Integer> {
 	@Query(value = "UPDATE stock SET item_qty = ? WHERE item_id = ?", nativeQuery = true)
 	public void updateStockQty(int itemQTY, int itemId);
 
+	// Update Stock Item sellingPrice by itemID
+	@Modifying
+	@Query(value = "UPDATE stock SET selling_price = ? WHERE item_id = ?", nativeQuery = true)
+	public void updateSellingPrice(double sellingPrice, int itemId);
+
 	// Update Stock Item salePrice by itemID
 	@Modifying
 	@Query(value = "UPDATE stock SET sale_price = ? WHERE item_id = ?", nativeQuery = true)

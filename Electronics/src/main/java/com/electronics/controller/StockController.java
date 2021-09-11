@@ -97,12 +97,29 @@ public class StockController {
 
 	// UPDATE STOCK ITEM SALE PRICE BY PERCENT & ITEM ID
 	@ResponseStatus(value = HttpStatus.OK)
+	@PutMapping(value = "updateSellingPrice.iwh:Id={itemId}&Percent={percent}")
+	public Stock updateSellingPrice(HttpServletRequest req, @PathVariable int itemId, @PathVariable double percent) {
+		double sellingPercent = 0.0;
+		if(percent > 0) sellingPercent = percent / 100.0;
+
+		return stockService.updateSellingPrice(sellingPercent, itemId);
+	}
+
+	// UPDATE STOCK ITEM SALE PRICE BY PERCENT & ITEM ID
+	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping(value = "updateSalePrice.iwh:Id={itemId}&Percent={percent}")
 	public Stock updateSalePrice(HttpServletRequest req, @PathVariable int itemId, @PathVariable double percent) {
 		double salePercent = 0.0;
 		if(percent > 0) salePercent = percent / 100.0;
 
 		return stockService.updateSalePrice(salePercent, itemId);
+	}
+
+	// SAVE STOCK ITEM SELLING PRICE BY ITEM ID
+	@ResponseStatus(value = HttpStatus.OK)
+	@PutMapping(value = "saveSellingPrice.iwh:Id={itemId}&Selling={sellingPrice}")
+	public Stock saveSellingPrice(HttpServletRequest req, @PathVariable int itemId, @PathVariable double sellingPrice) {
+		return stockService.saveSellingPrice(sellingPrice, itemId);
 	}
 
 	// SAVE STOCK ITEM SALE PRICE BY ITEM ID
