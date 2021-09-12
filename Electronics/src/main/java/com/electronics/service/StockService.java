@@ -1,7 +1,7 @@
 package com.electronics.service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -135,13 +135,27 @@ public class StockService {
 	
 	// UPDATE STOCK ITEM SELLING PRICE BY PERCENT & ITEM ID
 	public Stock updateSellingPrice(double sellingPercent, int itemId) {
+		double costPrice = stockRepo.getItemById(itemId).getCostPrice();
 		double sellingPrice = stockRepo.getItemById(itemId).getSellingPrice();
-		double profitAmount = sellingPrice * sellingPercent;
-		sellingPrice = sellingPrice + profitAmount;		
-		if(sellingPercent == 0) sellingPrice = stockRepo.getItemById(itemId).getCostPrice();
+		double salePrice = stockRepo.getItemById(itemId).getSalePrice();
+		double salePercent = 1 - (salePrice / sellingPrice);
 		
+		double profitAmount = costPrice * sellingPercent;
+		sellingPrice = costPrice + profitAmount;		
+		if(sellingPercent == 0) sellingPrice = costPrice;
+		
+		// Update Selling Price
+		sellingPrice = Math.round(sellingPrice * 100.0) / 100.0;
 		stockRepo.updateSellingPrice(sellingPrice, itemId);
 		
+		double saleAmount = sellingPrice * salePercent;
+		salePrice = sellingPrice - saleAmount;		
+		if(salePercent == 0) salePrice = 0;
+		
+		// Update Sale Price based on new value of Selling Price
+		salePrice = Math.round(salePrice * 100.0) / 100.0;
+		stockRepo.updateSalePrice(salePrice, itemId);
+
 		Stock stock = stockRepo.getItemById(itemId);		
 		stock.setUpdatedBy(UserController.uName + " - Set Selling Price as " + (sellingPercent * 100) + "% - Date: " + LocalDate.now() + ", Time: " + LocalTime.now());
 		stockRepo.save(stock);
@@ -160,6 +174,7 @@ public class StockService {
 		double salePrice = sellingPrice - saleAmount;		
 		if(salePercent == 0) salePrice = 0;
 		
+		salePrice = Math.round(salePrice * 100.0) / 100.0;
 		stockRepo.updateSalePrice(salePrice, itemId);
 		
 		Stock stock = stockRepo.getItemById(itemId);		
@@ -175,6 +190,7 @@ public class StockService {
 	
 	// SAVE STOCK ITEM SELLING PRICE BY ITEM ID
 	public Stock saveSellingPrice(double sellingPrice, int itemId) {
+		sellingPrice = Math.round(sellingPrice * 100.0) / 100.0;
 		stockRepo.updateSellingPrice(sellingPrice, itemId);
 		
 		Stock stock = stockRepo.getItemById(itemId);		
@@ -190,6 +206,7 @@ public class StockService {
 
 	// SAVE STOCK ITEM SALE PRICE BY ITEM ID
 	public Stock saveSalePrice(double salePrice, int itemId) {
+		salePrice = Math.round(salePrice * 100.0) / 100.0;
 		stockRepo.updateSalePrice(salePrice, itemId);
 		
 		Stock stock = stockRepo.getItemById(itemId);		
