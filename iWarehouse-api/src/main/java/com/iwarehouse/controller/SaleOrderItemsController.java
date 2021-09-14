@@ -62,14 +62,14 @@ public class SaleOrderItemsController {
 		return saleOrderItemsService.getOrderItem(itemSEQ);
 	}
 	
-	// RETRIEVE CURRENT UNIT PRICE FOR ALL ORDER ITEMS BY ORDER ID
+	// RETRIEVE CURRENT UNIT PRICE FOR ALL ORDER ITEMS BY ORDER ID  *** NOT USED
 	@ResponseStatus(value = HttpStatus.OK)
 	@GetMapping(value = "retrieveUnitPrice.iwh:Id={orderId}")
 	public void retrieveUnitPrice(HttpServletRequest req, @PathVariable int orderId) {
 		saleOrderItemsService.retrieveUnitPrice(orderId);
 	}
 	
-	// RETRIEVE CURRENT SALE PRICE FOR ALL ORDER ITEMS BY ORDER ID
+	// RETRIEVE CURRENT SALE PRICE FOR ALL ORDER ITEMS BY ORDER ID  *** NOT USED
 	@ResponseStatus(value = HttpStatus.OK)
 	@GetMapping(value = "retrieveSalePrice.iwh:Id={orderId}")
 	public void retrieveSalePrice(HttpServletRequest req, @PathVariable int orderId) {
