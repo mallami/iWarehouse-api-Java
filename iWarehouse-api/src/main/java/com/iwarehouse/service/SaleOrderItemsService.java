@@ -115,7 +115,7 @@ public class SaleOrderItemsService {
 		return saleOrderItemsRepo.calculateOrderTotal(orderId);
 	}
 	
-	// RETRIEVE CURRENT UNIT PRICE FOR ALL ORDER ITEMS BY ORDER ID
+	// RETRIEVE CURRENT UNIT PRICE FOR ALL ORDER ITEMS BY ORDER ID  *** NOT USED
 	public void retrieveUnitPrice(int orderId) {
 		List<SaleOrderItems> itemsList = new ArrayList<>();
 		itemsList = saleOrderItemsRepo.getAllOrderItems(orderId);
@@ -129,7 +129,7 @@ public class SaleOrderItemsService {
 		}
 	}
 
-	// RETRIEVE CURRENT SALE PRICE FOR ALL ORDER ITEMS BY ORDER ID
+	// RETRIEVE CURRENT SALE PRICE FOR ALL ORDER ITEMS BY ORDER ID  *** NOT USED
 	public void retrieveSalePrice(int orderId) {
 		List<SaleOrderItems> itemsList = new ArrayList<>();
 		itemsList = saleOrderItemsRepo.getAllOrderItems(orderId);
